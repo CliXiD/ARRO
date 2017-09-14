@@ -1,0 +1,39 @@
+.main-container {
+    display: grid;
+    display: -ms-grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1em;
+}
+
+.main-container.no-gap {
+    grid-gap: 0;
+}
+
+.content-panel {
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+}
+
+.login-container {
+    max-width: 400px;
+    min-width: 400px;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.navbar.navbar-default .nav.navbar-nav>li>a.active {
+    color: #333;
+    background-color: transparent;
+}
+
+.dropdown-menu.fade {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.open>.dropdown-menu.fade {
+    pointer-events: auto;
+    opacity: 1;
+}

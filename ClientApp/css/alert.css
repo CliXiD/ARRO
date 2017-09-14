@@ -1,0 +1,20 @@
+.fade {
+	transition: ease-in 0.15s;
+	transition-property: opacity, transform;
+  }
+  
+  .fade-entering {
+	opacity: 0.01;
+	transform: 'translateX(-100px)'
+  }
+  
+  .fade-entered{
+	opacity: 1;
+	/* transition: opacity 100ms ease-in; */
+	transform: 'translateX(0px)'
+  }
+  
+  .fade-exiting {
+	opacity: 0.01;
+	transform: 'translateX(100px)'
+  }
