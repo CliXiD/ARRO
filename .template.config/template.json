@@ -1,94 +1,39 @@
 {
+	"$schema": "http://json.schemastore.org/template",
 	"author": "Khajonpot Sawangdee",
 	"classifications": [
-		"Web"
+		"Web",
+		"MVC",
+		"SPA"
 	],
-	"name": "ASP - React Redux with OpenIdDict",
-	"identity": "ASP.React.Redux.OpenIdDict", // Unique name for this template
-	"shortName": "arro", // Short name that can be used on the cli
-	"tags": {
-		"language": "C#", // Specify that this template is in C#.
-		"type": "project"
-	},
+	"identity": "CLIXID.ARRO",
+	"name": "ASP.NET Core with React.js Redux and OpenIdDict",
+	"preferNameDirectory": true,
 	"primaryOutputs": [
 		{
-			"path": "ReactReduxSpa.csproj"
+			"path": "ARRO.csproj"
 		}
 	],
+	"shortName": "arro",
+	"sourceName": "ARRO",
 	"sources": [
 		{
 			"source": "./",
 			"target": "./",
 			"exclude": [
-				".template.config/**",
-				".vscode/**",
-				"bin/**",
-				"node_modules/**",
-				"obj/**",
-				"wwwroot/dist/**"
+				"**/[Bb]in/**",
+				"**/[Oo]bj/**",
+				".template.config/**/*",
+				"**/*.filelist",
+				"**/*.user",
+				"**/*.lock.json",
+				"**/node_modules/**/*",
+				"**/dist/**"
 			]
 		}
 	],
-	"sourceName": "ARRO", // Will replace the string 'Sayedha.StarterWeb' with the value provided via -n.
-	"symbols": {
-		"title": {
-			"type": "parameter",
-			"defaultValue": "Hello Web",
-			"replaces": "ARRO Web"
-		},
-		"TargetFrameworkOverride": {
-			"type": "parameter",
-			"description": "Overrides the target framework",
-			"replaces": "TargetFrameworkOverride",
-			"datatype": "string",
-			"defaultValue": ""
-		},
-		"Framework": {
-			"type": "parameter",
-			"description": "The target framework for the project.",
-			"datatype": "choice",
-			"choices": [
-				{
-					"choice": "netcoreapp2.0",
-					"description": "Target netcoreapp2.0"
-				}
-			],
-			"replaces": "netcoreapp2.0",
-			"defaultValue": "netcoreapp2.0"
-		},
-		"HostIdentifier": {
-			"type": "bind",
-			"binding": "HostIdentifier"
-		},
-		"skipRestore": {
-			"type": "parameter",
-			"datatype": "bool",
-			"description": "If specified, skips the automatic restore of the project on create.",
-			"defaultValue": "false"
-		}
-	},
-	"preferNameDirectory": "true",
-	"postActions": [
-		{
-			"condition": "(!skipRestore)",
-			"description": "Restore NuGet packages required by this project.",
-			"manualInstructions": [
-				{
-					"text": "Run 'dotnet restore'"
-				}
-			],
-			"actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
-			"continueOnError": true
-		},
-		{
-			"condition": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")",
-			"actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
-			"description": "\n\n-------------------------------------------------------------------\nIMPORTANT: Before running this project on the command line,\n           you must restore NPM packages by running \"npm install\"\n-------------------------------------------------------------------\n",
-			"manualInstructions": [
-				{
-					"text": "Run \"npm install\""
-				}
-			]
-		}
-	]
+	"tags": {
+		"language": "C#",
+		"type": "project"
+	}
 }
