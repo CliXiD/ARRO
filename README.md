@@ -1,6 +1,6 @@
 # ARRO
 
-ASP NET Core with React, Redux and OpenIdDict
+ASP NET Core with React, Redux and OpenIdDict project template
 Inspiration from <https://github.com/aspnet/templating>
 
 I create this project for learning in ASPNET Core, React, Redux and also to have it as seed project for simple CRUD web application.
@@ -25,6 +25,13 @@ This project also including .template.config so you can install this project as 
 
 To install this project in dotnet template, download or clone this project to your machine and run
 >dotnet new -i full/path/to/project/root
+
+To create project from my template:
+>mkdir ProjectName
+>cd ProjectName
+>dotnet new arro
+>npm install
+>dotnet run
 
 For the nuget package will be considering to create once everything are satisfied
 
