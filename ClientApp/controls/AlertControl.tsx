@@ -14,7 +14,7 @@ export interface AlertProps {
 export default class App extends React.Component<AlertProps, {}> {
     render() {
         return (
-            <TransitionGroup>
+            <TransitionGroup className='alerts'>
                 {
                     this.props.items.map((item) => {
                         if (item.autoClose){
