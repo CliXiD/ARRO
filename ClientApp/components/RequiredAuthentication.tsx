@@ -18,24 +18,20 @@ export function requireAuthentication(Component:React.ComponentClass) {
     class AuthenticatedComponent extends React.Component<SessionProps> {
 
         componentWillMount() {
-            this.checkAuth();
+            this.checkAuth(this.props);
         }
 
         componentWillReceiveProps(nextProps:SessionProps) {
-            this.checkAuth();
+            this.checkAuth(nextProps);
         }
 
-        checkAuth() {
-            // if (this.props.token === undefined) {
-            //     let redirectAfterLogin = this.props.location.pathname;
-            //     this.props.history.push(`/`);
-            // }
-            if (this.props.token === undefined){
+        checkAuth(props:SessionProps) {
+            if (props.isRequiredRefreshOnClient === true) return;
+            if (props.token === undefined){
                 this.props.alertActions.sendAlert('Please log-in', AlertType.info, true);
-                let redirectAfterLogin = this.props.location.pathname;
-                this.props.history.replace(`/`);
                 this.props.sessionActions.cancelRequiredToken();
                 this.props.sessionActions.requiredToken();
+                this.props.history.replace(`/`);
             }
         }
 
