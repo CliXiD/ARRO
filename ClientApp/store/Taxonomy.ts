@@ -7,8 +7,7 @@ import { Taxonomy, Bearer, ErrorMessage, AlertType } from '../Models';
 export interface TaxonomyState {
     items: Taxonomy[];
     activeTaxonomy?: Taxonomy,
-    isLoading: boolean,
-    hasDeleted: boolean,
+    isLoading: boolean
 }
 
 interface GetTaxonomyItems {
@@ -36,11 +35,7 @@ interface SubmitTaxonomy {
     activeTaxonomy: Taxonomy
 }
 
-interface DeletedTaxonomy {
-    type: 'DELETED_TAXONOMY';
-}
-
-export type KnownAction = GetTaxonomy | ReceiveTaxonomy | GetTaxonomyItems | ReceiveTaxonomyItems | SubmitTaxonomy | DeletedTaxonomy;
+export type KnownAction = GetTaxonomy | ReceiveTaxonomy | GetTaxonomyItems | ReceiveTaxonomyItems | SubmitTaxonomy;
 export const actionCreators = {
     getAllTaxonomy: (filter?:object): AppThunkAction<KnownAction> => (dispatch, getState) => {
         let token = getState().session.token;
@@ -89,7 +84,7 @@ export const actionCreators = {
             dispatch({type:'REQUEST_TAXONOMY',id:id});
         }
     },
-    delete:(id:number):AppThunkAction<KnownAction> => (dispatch, getState) =>{
+    delete:(id:number, cb:()=>void) :AppThunkAction<KnownAction> => (dispatch, getState) =>{
         let token = getState().session.token;
         if (token !== undefined)
         {
@@ -99,7 +94,7 @@ export const actionCreators = {
                 },
                 method:'DELETE'
             })
-            .then(()=> dispatch({type:'DELETED_TAXONOMY'}))
+            .then(()=> cb())
             .catch(err=> {
                 console.log(err);
             });
@@ -123,6 +118,14 @@ export const actionCreators = {
                     method:'POST',
                     body: JSON.stringify(value)
                 })
+                .then(response => response.json() as Promise<Taxonomy>)
+                .then(data => {
+                    dispatch({type:'RECEIVE_TAXONOMY', activeTaxonomy:data});
+                    cb();
+                })
+                .catch(err=> {
+                    console.log(err);
+                });
             }else{
                 fetchTask = fetch(`api/taxonomy/${value.id}`,{
                     headers:{
@@ -132,22 +135,20 @@ export const actionCreators = {
                     method:'PUT',
                     body: JSON.stringify(value)
                 })
+                .then(() => {
+                    cb();
+                })
+                .catch(err=> {
+                    console.log(err);
+                });
             }
-            fetchTask.then(response => response.json() as Promise<Taxonomy>)
-            .then(data => {
-                dispatch({type:'RECEIVE_TAXONOMY', activeTaxonomy:data});
-                cb();
-            })
-            .catch(err=> {
-                console.log(err);
-            });
             addTask(fetchTask);
             dispatch({type:'SUBMIT_TAXONOMY',activeTaxonomy:value});
         }
     }
 }
 
-const unloadedState: TaxonomyState = { items: [], activeTaxonomy: undefined, isLoading: false, hasDeleted:false };
+const unloadedState: TaxonomyState = { items: [], activeTaxonomy: undefined, isLoading: false };
 export const reducer: Reducer<TaxonomyState> = (state: TaxonomyState, incomingAction: Action) => {
     const action = incomingAction as KnownAction;
     switch (action.type) {
@@ -155,41 +156,30 @@ export const reducer: Reducer<TaxonomyState> = (state: TaxonomyState, incomingAc
             return {
                 items: state.items,
                 activeTaxonomy: state.activeTaxonomy,
-                isLoading: true,
-                hasDeleted: false
+                isLoading: true
             };
         case 'RECEIVE_TAXONOMY_ITEMS':
             return {
                 items: action.items,
                 activeTaxonomy: state.activeTaxonomy,
-                isLoading: false,
-                hasDeleted: false
+                isLoading: false
             };
         case 'REQUEST_TAXONOMY':
             return {
                 items: state.items,
-                isLoading: true,
-                hasDeleted:false
+                isLoading: true
             }
         case 'RECEIVE_TAXONOMY':
             return {
                 items: state.items,
                 activeTaxonomy: action.activeTaxonomy,
-                isLoading: false,
-                hasDeleted:false
+                isLoading: false
             }
         case 'SUBMIT_TAXONOMY':
             return {
                 items: state.items,
                 activeTaxonomy: action.activeTaxonomy,
-                isLoading: true,
-                hasDeleted: false
-            }
-        case 'DELETED_TAXONOMY':
-            return {
-                items: state.items,
-                isLoading: false,
-                hasDeleted: true
+                isLoading: true
             }
         default:
             // The following line guarantees that every action in the KnownAction union has been covered by a case above
