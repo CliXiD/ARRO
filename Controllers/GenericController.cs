@@ -16,7 +16,7 @@ using AspNet.Security.OAuth.Validation;
 
 namespace ARRO.Controllers
 {
-    
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     abstract public class GenericController<T,KeyType> : Controller where T:class{
         protected ApplicationContext context;
@@ -24,6 +24,7 @@ namespace ARRO.Controllers
             this.context = context;
         }
         /// Create
+        
         [HttpPost]
         public virtual IActionResult Post([FromBody]T item)
         {
@@ -47,14 +48,15 @@ namespace ARRO.Controllers
                 return result;
             }
         }
+
         ///Read all entities
-        
         [HttpGet]
         public virtual IEnumerable<T> Get([FromQuery]Dictionary<string, string> filter)
         {
             var result = context.Set<T>().ToList();
             return result;
         }
+
         /// Read single entity
         [HttpGet("{id}")]
         public virtual IActionResult GetById(KeyType id)
@@ -70,6 +72,7 @@ namespace ARRO.Controllers
 
             return new ObjectResult(result);;
         }
+
         [HttpPut("{id}")]
         public virtual IActionResult Update(KeyType id,[FromBody] T item)
         {
