@@ -32,6 +32,7 @@ export interface ErrorMessage {
 export interface TableDefinition {
     columns: Field[];
     data: any[];
+    tableClassName?: string;
 }
 
 export interface Field {

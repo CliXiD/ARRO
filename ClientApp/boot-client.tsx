@@ -1,6 +1,7 @@
 import './css/site.css';
 import './css/alert.css';
 import './css/form.css';
+import './css/table.css';
 import 'bootstrap';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';

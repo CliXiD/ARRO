@@ -1,0 +1,14 @@
+table.dynamic>thead>tr>th.actions{
+    width:1%
+}
+table.dynamic>tbody>tr>td.actions>div{
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: 1fr;
+}
+table.dynamic>tbody>tr>td.actions-2>div{
+    grid-template-columns: 1fr 1fr;
+}
+table.dynamic>tbody>tr>td.actions-3>div{
+    grid-template-columns: 1fr 1fr 1fr;
+}

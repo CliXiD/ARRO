@@ -18,7 +18,7 @@ type AppProps = ApplicationState
     & RouteComponentProps<{}>;
 
 const columns: Field[] = [
-    { caption: "", mapping_field: "action" },
+    { caption: "", mapping_field: "action", class:"actions actions-2" },
     { caption: "Group", mapping_field: "group" },
     { caption: "Name", mapping_field: "name" },
     { caption: "Caption", mapping_field: "caption" },
