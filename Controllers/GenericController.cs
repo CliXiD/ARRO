@@ -18,13 +18,15 @@ namespace ARRO.Controllers
 {
     [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
-    abstract public class GenericController<T,KeyType> : Controller where T:class{
+    abstract public class GenericController<T, KeyType> : Controller where T : class
+    {
         protected ApplicationContext context;
-        public GenericController(ApplicationContext context){
+        public GenericController(ApplicationContext context)
+        {
             this.context = context;
         }
         /// Create
-        
+
         [HttpPost]
         public virtual IActionResult Post([FromBody]T item)
         {
@@ -35,7 +37,7 @@ namespace ARRO.Controllers
 
             try
             {
-                var key = typeof(T).GetProperties().FirstOrDefault(p => 
+                var key = typeof(T).GetProperties().FirstOrDefault(p =>
                 p.CustomAttributes.Any(attr => attr.AttributeType == typeof(KeyAttribute)));
                 context.Add(item);
                 context.SaveChanges();
@@ -61,8 +63,8 @@ namespace ARRO.Controllers
         [HttpGet("{id}")]
         public virtual IActionResult GetById(KeyType id)
         {
-            var result = context.Find(typeof(T),new object[] {id});
-            
+            var result = context.Find(typeof(T), new object[] { id });
+
             //var result = collection.SingleOrDefault(item=>EF.Functions.Like(key.GetValue(item).ToString(), id));
 
             if (result == null)
@@ -70,13 +72,13 @@ namespace ARRO.Controllers
                 return NotFound();
             }
 
-            return new ObjectResult(result);;
+            return new ObjectResult(result); ;
         }
 
         [HttpPut("{id}")]
-        public virtual IActionResult Update(KeyType id,[FromBody] T item)
+        public virtual IActionResult Update(KeyType id, [FromBody] T item)
         {
-            var key = typeof(T).GetProperties().FirstOrDefault(p => 
+            var key = typeof(T).GetProperties().FirstOrDefault(p =>
                 p.CustomAttributes.Any(attr => attr.AttributeType == typeof(KeyAttribute)));
 
             // if (item == null || !((KeyType) key.GetValue(item)).Equals(id))
@@ -84,14 +86,14 @@ namespace ARRO.Controllers
             //     return BadRequest();
             // }
 
-            var result = context.Find(typeof(T),new object[] {id});
+            var result = context.Find(typeof(T), new object[] { id });
             if (result == null)
             {
                 return NotFound();
             }
 
             var tProperties = typeof(T).GetProperties();
-            foreach(var prop in tProperties)
+            foreach (var prop in tProperties)
             {
                 prop.SetValue(result, prop.GetValue(item));
             }
@@ -104,7 +106,7 @@ namespace ARRO.Controllers
         [HttpDelete("{id}")]
         public virtual IActionResult Delete(KeyType id)
         {
-            var result = context.Find(typeof(T),new object[] {id});
+            var result = context.Find(typeof(T), new object[] { id });
             if (result == null)
             {
                 return NotFound();
