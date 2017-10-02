@@ -14,7 +14,7 @@ namespace ARRO.Contexts
         private const string _isDeleted = "IsDeleted";
         private const string _createdDate = "CreatedDate";
         private const string _updatedDate = "UpdatedDate";
-		public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             //Database.EnsureCreated();
         }
@@ -47,13 +47,13 @@ namespace ARRO.Contexts
             ChangeTracker.DetectChanges();
             //foreach (var item in ChangeTracker.Entries<BaseModel>().Where(e => e.State == EntityState.Added))
             //{
-                //item.CurrentValues["CreatedBy"] = currentUser;
-                //item.CurrentValues["UpdatedBy"] = currentUser;
+            //item.CurrentValues["CreatedBy"] = currentUser;
+            //item.CurrentValues["UpdatedBy"] = currentUser;
             //}
 
             //foreach (var item in ChangeTracker.Entries<BaseModel>().Where(e => e.State == EntityState.Added))
             //{
-                //item.CurrentValues["UpdatedBy"] = currentUser;
+            //item.CurrentValues["UpdatedBy"] = currentUser;
             //}
 
             foreach (var item in ChangeTracker.Entries<Taxonomy>().Where(e => e.State == EntityState.Deleted))

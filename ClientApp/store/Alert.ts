@@ -61,7 +61,7 @@ export const reducer: Reducer<AlertState> = (state: AlertState, incomingAction: 
             }
         case 'START_ANIMATE':
             return {
-                items: state.items.map(item=>{ if(item.id === action.id) { item.in = true; } return item; })
+                items: state.items.map(item => { if (item.id === action.id) { item.in = true; } return item; })
             }
         case 'CLOSE_ALERT':
             return {

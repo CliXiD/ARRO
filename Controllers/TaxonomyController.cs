@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ARRO.Controllers
 {
-    public class TaxonomyController : GenericController<Taxonomy,long>
+    public class TaxonomyController : GenericController<Taxonomy, long>
     {
         public TaxonomyController(ApplicationContext context) : base(context)
         {
-    	}
+        }
     }
 }

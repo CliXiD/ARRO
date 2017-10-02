@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ARRO.Models
 {
-    public class Taxonomy: BaseModel
+    public class Taxonomy : BaseModel
     {
         [Key]
         public long ID { get; set; }

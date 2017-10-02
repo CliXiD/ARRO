@@ -27,31 +27,32 @@ namespace ARRO
         }
 
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment HostingEnvironment {get;}
+        public IHostingEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            
-            
+
+
             services.AddCors();
             services.AddMvc();
 
-            services.AddDbContext<ApplicationContext>(options => {
+            services.AddDbContext<ApplicationContext>(options =>
+            {
                 //if(HostingEnvironment.IsDevelopment())
                 //{
-                    options.UseInMemoryDatabase("ARRO");
+                options.UseInMemoryDatabase("ARRO");
                 //}else{
                 //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 //}
                 options.UseOpenIddict();
             });
-            
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
-            
+
             // Configure Identity
             services.Configure<IdentityOptions>(options =>
             {
@@ -107,8 +108,8 @@ namespace ARRO
             }
             app.UseStaticFiles();
             app.UseAuthentication();
-            
-			app.UseSwagger();
+
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");

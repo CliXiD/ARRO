@@ -7,13 +7,13 @@ import * as AlertState from '../store/Alert';
 import { AlertType } from '../Models';
 import { bindActionCreators, Dispatch } from 'redux';
 
-export function requireAuthentication(Component:React.ComponentClass) {
+export function requireAuthentication(Component: React.ComponentClass) {
     type SessionProps = SessionState.SessionState
-    & {
-        sessionActions: typeof SessionState.actionCreators,
-        alertActions: typeof AlertState.actionCreators
-    }
-    & RouteComponentProps<{}>
+        & {
+            sessionActions: typeof SessionState.actionCreators,
+            alertActions: typeof AlertState.actionCreators
+        }
+        & RouteComponentProps<{}>
 
     class AuthenticatedComponent extends React.Component<SessionProps> {
 
@@ -21,13 +21,13 @@ export function requireAuthentication(Component:React.ComponentClass) {
             this.checkAuth(this.props);
         }
 
-        componentWillReceiveProps(nextProps:SessionProps) {
+        componentWillReceiveProps(nextProps: SessionProps) {
             this.checkAuth(nextProps);
         }
 
-        checkAuth(props:SessionProps) {
+        checkAuth(props: SessionProps) {
             if (props.isRequiredRefreshOnClient === true) return;
-            if (props.token === undefined){
+            if (props.token === undefined) {
                 this.props.alertActions.sendAlert('Please log-in', AlertType.info, true);
                 this.props.sessionActions.cancelRequiredToken();
                 this.props.sessionActions.requiredToken();
@@ -37,7 +37,7 @@ export function requireAuthentication(Component:React.ComponentClass) {
 
         render() {
             return (
-                <Component {...this.props}/>
+                <Component {...this.props} />
             )
         }
     }

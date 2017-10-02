@@ -42,10 +42,12 @@ class App extends React.Component<AppProps, any> {
                 fields={fields}
                 initialValues={this.props.activeTaxonomy}
                 onCancel={this.props.history.goBack}
-                onSubmit={(values: Taxonomy, dispatch) => { this.props.taxonomyActions.submit(values, () => {
-                    this.props.history.push('/taxonomy');
-                    this.props.alertActions.sendAlert('Taxonomy is saved', AlertType.success, true);
-                }) }} />
+                onSubmit={(values: Taxonomy, dispatch) => {
+                    this.props.taxonomyActions.submit(values, () => {
+                        this.props.history.push('/taxonomy');
+                        this.props.alertActions.sendAlert('Taxonomy is saved', AlertType.success, true);
+                    })
+                }} />
         );
     }
 }

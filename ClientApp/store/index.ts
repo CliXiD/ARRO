@@ -6,7 +6,7 @@ import { reducer as formReducer } from 'redux-form';
 // The top-level state object
 export interface ApplicationState {
     session: Session.SessionState;
-	taxonomy: Taxonomy.TaxonomyState;
+    taxonomy: Taxonomy.TaxonomyState;
     alert: Alert.AlertState;
 }
 

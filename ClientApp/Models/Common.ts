@@ -39,5 +39,5 @@ export interface Field {
     caption: string;
     mapping_field: string;
     class?: string;
-    type?:string;
+    type?: string;
 }

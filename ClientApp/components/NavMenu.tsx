@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { NavLink, Link, RouteComponentProps } from 'react-router-dom';
 import { ProviderProps } from 'react-redux';
 
-export default class NavMenu extends React.Component<{},{}> {
+export default class NavMenu extends React.Component<{}, {}> {
     public render() {
         return <div className='main-nav'>
             <div className='navbar navbar-default'>

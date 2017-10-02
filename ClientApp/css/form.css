@@ -1,4 +1,4 @@
-.form-wrapper{
+.form-wrapper {
     display: grid;
     display: -ms-grid;
     grid-auto-columns: min-content auto;
@@ -10,36 +10,35 @@
     margin-right: auto;
 }
 
-.form-wrapper label{
+.form-wrapper label {
     grid-column: 1;
 }
 
-.form-wrapper input{
+.form-wrapper input {
     grid-column: 2;
 }
 
-.form-wrapper div{
+.form-wrapper div {
     grid-column: 2;
 }
 
-.form-wrapper .submit{
+.form-wrapper .submit {
     grid-column: 1/3;
     text-align: center;
 }
-.form-wrapper .submit button{
+
+.form-wrapper .submit button {
     margin: 1em;
 }
 
 @media (max-width: 767px) {
-    .form-wrapper label{
+    .form-wrapper label {
         grid-column: 1/3;
     }
-    
-    .form-wrapper input{
+    .form-wrapper input {
         grid-column: 1/3;
     }
-    
-    .form-wrapper div{
+    .form-wrapper div {
         grid-column: 1/3;
     }
 }
