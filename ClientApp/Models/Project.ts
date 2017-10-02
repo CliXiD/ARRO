@@ -1,6 +1,6 @@
 export interface Taxonomy {
-    id?:number;
+    id?: number;
     name: string;
     caption: string;
-    group:string;
+    group: string;
 }

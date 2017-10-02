@@ -1,32 +1,32 @@
 import * as React from 'react';
-import { TableDefinition, Field } from '../Models';
+import { Field, TableDefinition } from '../Models';
 
-export class DynamicTable extends React.Component<TableDefinition, {}>{
-    render() {
+export class DynamicTable extends React.Component<TableDefinition, {}> {
+    public render() {
         return (
-
-            <table className={"dynamic " + (this.props.tableClassName || "table table-striped table-condensed table-bordered")}>
+            <table className={'dynamic ' + (this.props.tableClassName || 'table table-striped table-condensed table-bordered')}>
                 <thead>
                     <tr>
-                        {
-                            this.props.columns.map((column, index) => <th key={index} className={column.class}>{column.caption}</th>)
-                        }
+                        {this.props.columns.map(this.renderHeader)}
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        this.props.data.map((row, rowIndex) => {
-                            return (
-                                <tr key={rowIndex}>
-                                    {
-                                        this.props.columns.map((column, columnIndex) => <td key={columnIndex} className={column.class}>{row[column.mapping_field]}</td>)
-                                    }
-                                </tr>
-                            );
-                        })
-                    }
+                    {this.props.data.map(this.renderRow)}
                 </tbody>
             </table>
+        );
+    }
+    private renderHeader = (column: Field, index: number) => (
+        <th key={index} className={column.class}>{column.caption}</th>
+    )
+    private renderRow = (row: any, rowIndex: number) => {
+        const renderCell = (column: Field, columnIndex: number) => (
+            <td key={columnIndex} className={column.class}>{row[column.mapping_field]}</td>
+        );
+        return (
+        <tr key={rowIndex}>
+        {this.props.columns.map(renderCell)}
+        </tr>
         );
     }
 }

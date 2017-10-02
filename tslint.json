@@ -1,0 +1,10 @@
+{
+    "extends": ["tslint:latest", "tslint-react"],
+    "rules": {
+        "interface-name": [true, "never-prefix"],
+        "indent": [true, "spaces", 4],
+        "max-line-length":false,
+        "quotemark": [true, "single", "jsx-double"],
+        "no-submodule-imports": false
+    }
+}

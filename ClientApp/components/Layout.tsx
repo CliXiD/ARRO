@@ -8,16 +8,18 @@ interface LayoutProps {
 
 export class Layout extends React.Component<LayoutProps, {}> {
     public render() {
-        return <div className='main-container no-gap'>
-            <div>
-                <NavMenu>
-                    <this.props.usermenu />
-                </NavMenu>
+        return (
+            <div className="main-container no-gap">
+                <div>
+                    <NavMenu>
+                        <this.props.usermenu />
+                    </NavMenu>
+                </div>
+                <div className="content-panel">
+                    <this.props.alert />
+                    {this.props.children}
+                </div>
             </div>
-            <div className="content-panel">
-                <this.props.alert />
-                {this.props.children}
-            </div>
-        </div>;
+        );
     }
 }

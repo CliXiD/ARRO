@@ -1,32 +1,32 @@
 import * as React from 'react';
-import { NavLink, Link, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ApplicationState } from '../store';
-import * as SessionState from '../store/Session';
-import * as AlertState from '../store/Alert';
-import { AlertType } from '../Models';
+import { Link, NavLink, RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
+import { AlertType } from '../Models';
+import { ApplicationState } from '../store';
+import * as AlertState from '../store/Alert';
+import * as SessionState from '../store/Session';
 
 export function requireAuthentication(Component: React.ComponentClass) {
     type SessionProps = SessionState.SessionState
         & {
             sessionActions: typeof SessionState.actionCreators,
-            alertActions: typeof AlertState.actionCreators
+            alertActions: typeof AlertState.actionCreators,
         }
-        & RouteComponentProps<{}>
+        & RouteComponentProps<{}>;
 
     class AuthenticatedComponent extends React.Component<SessionProps> {
 
-        componentWillMount() {
+        public componentWillMount() {
             this.checkAuth(this.props);
         }
 
-        componentWillReceiveProps(nextProps: SessionProps) {
+        public componentWillReceiveProps(nextProps: SessionProps) {
             this.checkAuth(nextProps);
         }
 
-        checkAuth(props: SessionProps) {
-            if (props.isRequiredRefreshOnClient === true) return;
+        public checkAuth(props: SessionProps) {
+            if (props.isRequiredRefreshOnClient === true) { return; }
             if (props.token === undefined) {
                 this.props.alertActions.sendAlert('Please log-in', AlertType.info, true);
                 this.props.sessionActions.cancelRequiredToken();
@@ -35,19 +35,19 @@ export function requireAuthentication(Component: React.ComponentClass) {
             }
         }
 
-        render() {
+        public render() {
             return (
                 <Component {...this.props} />
-            )
+            );
         }
     }
     return connect(
-        (state: ApplicationState) => state.session, // Selects which state properties are merged into the component's props
+        (state: ApplicationState) => state.session,
         (dispatch: Dispatch<SessionState.SessionState> | Dispatch<AlertState.AlertState>) => {
             return {
+                alertActions: bindActionCreators(AlertState.actionCreators, dispatch),
                 sessionActions: bindActionCreators(SessionState.actionCreators, dispatch),
-                alertActions: bindActionCreators(AlertState.actionCreators, dispatch)
-            }
-        }                  // Selects which action creators are merged into the component's props
+            };
+        },
     )(AuthenticatedComponent) as typeof AuthenticatedComponent;
 }

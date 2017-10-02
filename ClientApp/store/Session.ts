@@ -1,7 +1,7 @@
-import { fetch, addTask } from 'domain-task';
-import { Action, Reducer, ActionCreator } from 'redux';
-import { AppThunkAction } from './';
+import { addTask, fetch } from 'domain-task';
+import { Action, ActionCreator, Reducer } from 'redux';
 import { Bearer, ErrorMessage } from '../Models';
+import { AppThunkAction } from './';
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
@@ -33,11 +33,11 @@ interface LogoutAction {
 }
 
 interface RequiredTokenAction {
-    type: 'REQUIRED_TOKEN'
+    type: 'REQUIRED_TOKEN';
 }
 
 interface CancelRequiredTokenAction {
-    type: 'CANCEL_REQUIRED_TOKEN'
+    type: 'CANCEL_REQUIRED_TOKEN';
 }
 
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
@@ -48,25 +48,44 @@ export type KnownAction = RequestTokenAction | ReceiveTokenAction | RequiredToke
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 export const actionCreators = {
+    cancelRequiredToken: (): AppThunkAction<CancelRequiredTokenAction> => (dispatch, getState) => {
+        dispatch({ type: 'CANCEL_REQUIRED_TOKEN' });
+    },
+    loadToken: (): AppThunkAction<{}> => (dispatch, getState) => {
+        let bearer: Bearer | undefined = {};
+        let username: string | undefined = '';
+        if (typeof window !== 'undefined') {
+            if (window.sessionStorage) {
+                username = window.sessionStorage.username;
+                bearer = window.sessionStorage.jwt !== undefined ? JSON.parse(window.sessionStorage.jwt) : undefined;
+            } else if (window.localStorage) {
+                username = window.localStorage.username;
+                bearer = window.localStorage.jwt !== undefined ? JSON.parse(window.localStorage.jwt) : undefined;
+            }
+        }
+        if (bearerFromStore !== undefined && username !== undefined) {
+            dispatch({ type: 'RECEIVE_TOKEN', username, token: bearer });
+        } else if (typeof window !== 'undefined') {
+            dispatch({ type: 'CANCEL_REQUIRED_TOKEN' });
+        }
+    },
     login: (username: string, password: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
-        let fetchTask = fetch(
+        const fetchTask = fetch(
             `connect/token`,
             {
+                body: `grant_type=password&username=${username}&password=${password}`,
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 method: 'POST',
-                body: `grant_type=password&username=${username}&password=${password}`
-            }
+            },
         )
-            .then(response => response.json() as Promise<Bearer | ErrorMessage>)
-            .then(data => {
+            .then((response: any) => response.json() as Promise<Bearer | ErrorMessage>)
+            .then((data) => {
                 if ((data as ErrorMessage).error) {
                     dispatch({ type: 'RECEIVE_TOKEN', token: undefined });
-                }
-                else {
-                    dispatch({ type: 'RECEIVE_TOKEN', username: username, token: data as Bearer });
-                    ///Todo Update SessionStorage
+                } else {
+                    dispatch({ type: 'RECEIVE_TOKEN', username, token: data as Bearer });
                     if (typeof window !== 'undefined') {
                         if (window.sessionStorage) {
                             window.sessionStorage.setItem('username', username);
@@ -78,14 +97,14 @@ export const actionCreators = {
                     }
                 }
             })
-            .catch(err => {
+            .catch((err: any) => {
                 dispatch({ type: 'RECEIVE_TOKEN', token: undefined });
             });
         addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
-        dispatch({ type: 'REQUEST_TOKEN', username: username });
+        dispatch({ type: 'REQUEST_TOKEN', username });
     },
     logout: (): AppThunkAction<LogoutAction> => (dispatch, getState) => {
-        let fetchTask = fetch(`connect/logout`)
+        const fetchTask = fetch(`connect/logout`)
             .then(() => {
                 if (typeof window !== 'undefined') {
                     if (window.sessionStorage) {
@@ -97,91 +116,66 @@ export const actionCreators = {
                     }
                 }
                 dispatch({ type: 'LOGOUT' });
-            })
+            });
     },
     requiredToken: (): AppThunkAction<RequiredTokenAction> => (dispatch, getState) => {
         dispatch({ type: 'REQUIRED_TOKEN' });
     },
-    cancelRequiredToken: (): AppThunkAction<CancelRequiredTokenAction> => (dispatch, getState) => {
-        dispatch({ type: 'CANCEL_REQUIRED_TOKEN' });
-    },
-    loadToken: (): AppThunkAction<{}> => (dispatch, getState) => {
-        let bearerFromStore: Bearer | undefined = {};
-        let username: string | undefined = '';
-        if (typeof window !== 'undefined') {
-            if (window.sessionStorage) {
-                username = window.sessionStorage.username;
-                bearerFromStore = window.sessionStorage.jwt !== undefined ? JSON.parse(window.sessionStorage.jwt) : undefined;
-            } else if (window.localStorage) {
-                username = window.localStorage.username;
-                bearerFromStore = window.localStorage.jwt !== undefined ? JSON.parse(window.localStorage.jwt) : undefined;
-            }
-        }
-        if (bearerFromStore !== undefined && username !== undefined) {
-            dispatch({ type: 'RECEIVE_TOKEN', username: username, token: bearerFromStore });
-        } else if (typeof window !== 'undefined') {
-            dispatch({ type: 'CANCEL_REQUIRED_TOKEN' });
-        }
-    }
 };
 
-// ----------------
-// REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
-
-///Todo Update SessionStorage
 let bearerFromStore: Bearer = {};
-let username: string = '';
+let usernameFromStore: string = '';
 if (typeof window !== 'undefined') {
     if (window.sessionStorage) {
-        username = window.sessionStorage.username;
-        bearerFromStore = JSON.parse(window.sessionStorage.jwt || "{}");
+        usernameFromStore = window.sessionStorage.username;
+        bearerFromStore = JSON.parse(window.sessionStorage.jwt || '{}');
     } else if (window.localStorage) {
-        username = window.localStorage.username;
-        bearerFromStore = JSON.parse(window.localStorage.jwt || "{}");
+        usernameFromStore = window.localStorage.username;
+        bearerFromStore = JSON.parse(window.localStorage.jwt || '{}');
     }
 }
 
-const unloadedState: SessionState = { token: bearerFromStore.access_token ? bearerFromStore : undefined, isRequiredToken: false, username: username, isRequiredRefreshOnClient: true, isLoading: false };
+const unloadedState: SessionState = { token: bearerFromStore.access_token ? bearerFromStore : undefined, isRequiredToken: false, username: usernameFromStore, isRequiredRefreshOnClient: true, isLoading: false };
 
 export const reducer: Reducer<SessionState> = (state: SessionState, incomingAction: Action) => {
     const action = incomingAction as KnownAction | LogoutAction | CancelRequiredTokenAction;
     switch (action.type) {
         case 'REQUEST_TOKEN':
             return {
-                username: action.username,
-                token: state.token,
-                isRequiredToken: state.isRequiredToken,
+                isLoading: true,
                 isRequiredRefreshOnClient: false,
-                isLoading: true
+                isRequiredToken: state.isRequiredToken,
+                token: state.token,
+                username: action.username,
             };
         case 'RECEIVE_TOKEN':
             // Only accept the incoming data if it matches the most recent request. This ensures we correctly
             // handle out-of-order responses.
             return {
+                isLoading: false,
+                isRequiredRefreshOnClient: false,
+                isRequiredToken: false,
                 token: action.token,
                 username: action.username,
-                isRequiredToken: false,
-                isRequiredRefreshOnClient: false,
-                isLoading: false
             };
         case 'LOGOUT':
             return {
-                isRequiredToken: false,
+                isLoading: false,
                 isRequiredRefreshOnClient: false,
-                isLoading: false
+                isRequiredToken: false,
             };
         case 'REQUIRED_TOKEN':
             return {
-                isRequiredToken: true,
+                isLoading: false,
                 isRequiredRefreshOnClient: false,
-                isLoading: false
+                isRequiredToken: true,
             };
         case 'CANCEL_REQUIRED_TOKEN':
             return {
-                isRequiredToken: false,
+                isLoading: false,
                 isRequiredRefreshOnClient: false,
-                isLoading: false
-            }
+                isRequiredToken: false,
+            };
         default:
             // The following line guarantees that every action in the KnownAction union has been covered by a case above
             const exhaustiveCheck: never = action;
