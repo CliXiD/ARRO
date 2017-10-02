@@ -47,8 +47,6 @@ export type KnownAction = RequestTokenAction | ReceiveTokenAction | RequiredToke
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
-const client_secret = '901564A5-E7FE-42CB-B10D-61EF6A8F3654';
-const client_id = 'mvc';
 export const actionCreators = {
     login: (username: string, password: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         let fetchTask = fetch(
