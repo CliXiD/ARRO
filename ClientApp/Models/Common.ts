@@ -5,6 +5,13 @@ export enum AlertType {
     info = 'alert-info',
 }
 
+export enum AnimationState {
+    entering = 'entering',
+    entered = 'entered',
+    exiting = 'exiting',
+    exited = 'exited',
+}
+
 export interface AccessPropertyName {
     [prop: string]: any;
 }
@@ -13,8 +20,7 @@ export interface Alert {
     id: number;
     message?: React.ReactNode | string;
     alertType: AlertType;
-    autoClose: boolean;
-    in: boolean;
+    state: AnimationState;
 }
 
 export interface Bearer {
@@ -40,4 +46,13 @@ export interface Field {
     mapping_field: string;
     class?: string;
     type?: string;
+}
+
+export interface RegisterUser {
+    userName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    firstName: string;
+    lastName: string;
 }

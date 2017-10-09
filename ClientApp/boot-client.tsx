@@ -1,8 +1,9 @@
-import 'bootstrap';
 import './css/alert.css';
 import './css/form.css';
 import './css/site.css';
 import './css/table.css';
+
+import 'bootstrap';
 
 import { createBrowserHistory } from 'history';
 import * as React from 'react';
