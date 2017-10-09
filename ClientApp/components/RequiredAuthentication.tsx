@@ -49,5 +49,5 @@ export function requireAuthentication(Component: React.ComponentClass) {
                 sessionActions: bindActionCreators(SessionState.actionCreators, dispatch),
             };
         },
-    )(AuthenticatedComponent) as typeof AuthenticatedComponent;
+    )(AuthenticatedComponent);
 }

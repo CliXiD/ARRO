@@ -82,4 +82,4 @@ export default connect(
             taxonomyActions: bindActionCreators(TaxonomyState.actionCreators, dispatch),
         };
     },
-)(App) as typeof App;
+)(App);

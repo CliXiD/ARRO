@@ -133,4 +133,4 @@ class UserMenu extends React.Component<UserMenuProps, any> {
 export default connect(
     (state: ApplicationState) => state.session, // Selects which state properties are merged into the component's props
     SessionState.actionCreators,                // Selects which action creators are merged into the component's props
-)(UserMenu) as typeof UserMenu;
+)(UserMenu);

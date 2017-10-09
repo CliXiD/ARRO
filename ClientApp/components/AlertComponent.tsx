@@ -8,6 +8,5 @@ export default connect(
     (state: ApplicationState) => state.alert,
     {
         closeAlert: AlertState.actionCreators.closeAlert,
-        removeAlert: AlertState.actionCreators.removeAlert,
     },
-)(AlertControl) as typeof AlertControl;
+)(AlertControl);
