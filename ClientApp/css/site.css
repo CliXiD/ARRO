@@ -2,6 +2,8 @@
     display: grid;
     display: -ms-grid;
     grid-template-columns: 1fr;
+    -ms-grid-columns: 1fr;
+    -ms-grid-rows: 72px auto;
     grid-gap: 1em;
 }
 

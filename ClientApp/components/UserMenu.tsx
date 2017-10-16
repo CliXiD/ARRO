@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import { ApplicationState } from '../store';
 import * as SessionState from '../store/Session';
 
@@ -111,7 +113,7 @@ class UserMenu extends React.Component<UserMenuProps, any> {
                                     </form>
                                 </div>
                                 <div className="bottom text-center">
-                                    New here ? <a href="#"><b>Sign-Up</b></a>
+                                    New here ? <Link to={'/signup'}><b>Sign-Up</b></Link>
                                 </div>
                             </div>
                         </div>

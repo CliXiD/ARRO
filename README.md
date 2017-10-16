@@ -19,6 +19,7 @@ Features in this projects:
 - DynamicTable to create simple table by configuration
 - AlertControl with animation (in Alert store)
 - GenericController for generic REST APIs such as GET (all/by id), PUT, POST, DELETE which can help to create new APIs for an entity
+- CSS Grid layout. (Not support for IE and Edge yet)s
 
 This project also including .template.config so you can install this project as a part of dotnet project template too.
 

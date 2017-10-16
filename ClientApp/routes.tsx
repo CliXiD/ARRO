@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import AlertComponent from './components/AlertComponent';
 import Home from './components/Home';
 import { Layout } from './components/Layout';
+import RegisterUser from './components/RegisterUser';
 import * as RequiredAuthentication from './components/RequiredAuthentication';
 import Taxonomy from './components/Taxonomy';
 import TaxonomyDetail from './components/TaxonomyDetail';
@@ -14,5 +15,6 @@ export const routes = (
         <Route exact={true} path="/" component={Home} />
         <Route exact={true} path="/taxonomy" component={RequiredAuthentication.requireAuthentication(Taxonomy)} />
         <Route path="/taxonomy/:id" component={TaxonomyDetail} />
+        <Route exact={true} path="/signup" component={RegisterUser} />
     </Layout>
 );
