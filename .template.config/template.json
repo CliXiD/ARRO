@@ -30,7 +30,10 @@
 				"**/node_modules/**/*",
 				"**/dist/**",
 				".git/**",
-				".vscode/**"
+				".vscode/**",
+				"*.md",
+				"LICENSE",
+				"package-lock.json"
 			]
 		}
 	],

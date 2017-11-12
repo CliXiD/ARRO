@@ -8,5 +8,6 @@ namespace ARRO.Models
         public DateTime UpdatedDate { get; set; }
         public ApplicationUser CreatedBy { get; set; }
         public ApplicationUser UpdatedBy { get; set; }
+        public int Order { get; set; }
     }
 }

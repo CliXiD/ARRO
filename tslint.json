@@ -5,6 +5,7 @@
         "indent": [true, "spaces", 4],
         "max-line-length":false,
         "quotemark": [true, "single", "jsx-double"],
-        "no-submodule-imports": false
+        "no-submodule-imports": false,
+        "object-literal-sort-keys": false
     }
 }

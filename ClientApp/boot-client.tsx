@@ -7,6 +7,8 @@ import 'bootstrap';
 
 import { createBrowserHistory } from 'history';
 import * as React from 'react';
+// import { DragDropContext as dragDropContext } from 'react-dnd';
+// import HTML5Backend from 'react-dnd-html5-backend';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';

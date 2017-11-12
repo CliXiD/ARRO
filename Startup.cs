@@ -36,7 +36,10 @@ namespace ARRO
 
 
             services.AddCors();
-            services.AddMvc();
+            services.AddMvc()
+            .AddJsonOptions(
+                options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddDbContext<ApplicationContext>(options =>
             {

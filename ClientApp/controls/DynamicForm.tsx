@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Field, Form, GenericField, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
+import { Field, Form, FormProps, GenericField, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
 import { Field as ModelField } from '../Models';
 
 interface AdditionalProps {
@@ -7,19 +7,17 @@ interface AdditionalProps {
     fields: ModelField[];
 }
 
-type FormProps = InjectedFormProps & AdditionalProps;
-interface DynamicFieldProps {
+type DynamicFormProps = InjectedFormProps<{}, AdditionalProps>
+    & AdditionalProps;
+
+interface CustomFieldProps {
     label?: string;
     type?: string;
 }
-type CustomFieldProps = WrappedFieldProps & DynamicFieldProps;
+type DynamicFieldProps = CustomFieldProps & WrappedFieldProps;
 
-const renderField: React.StatelessComponent<CustomFieldProps> = ({
-    input,
-    label,
-    type,
-    meta,
-}) => {
+const renderField: React.SFC<DynamicFieldProps> = (props) => {
+    const { input, label, meta, type } = props;
     let validateStyle = '';
     if (meta.touched && !meta.pristine) {
         if (meta.valid) { validateStyle = 'has-success'; }
@@ -54,9 +52,9 @@ const renderField: React.StatelessComponent<CustomFieldProps> = ({
     );
 };
 
-const DynamicField = Field as new () => GenericField<DynamicFieldProps>;
+const DynamicField = Field as new () => Field<CustomFieldProps>;
 
-const dynamicForm = (props: FormProps) => {
+const dynamicForm: React.SFC<DynamicFormProps> = (props) => {
     const renderFieldItem = (field: ModelField): any => (
         [
             <label key={'lebel' + field.mapping_field} htmlFor={field.mapping_field}>{field.caption}</label>,
@@ -75,14 +73,14 @@ const dynamicForm = (props: FormProps) => {
         }
     };
     return (
-        <Form className="form-wrapper" name={props.form} onSubmit={props.handleSubmit}>
+        <form className="form-wrapper" name={props.form} onSubmit={props.handleSubmit}>
             {props.fields.map(renderFieldItem)}
             <div className="submit">
                 <button type="submit" className="btn" disabled={props.submitting}>Save</button>
                 <button className="btn" onClick={props.reset} disabled={props.pristine || props.submitting}>Reset</button>
                 {renderCancel()}
             </div>
-        </Form>
+        </form>
     );
 };
 

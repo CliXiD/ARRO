@@ -16,21 +16,24 @@ namespace ARRO.Contexts
             var _roleManager = roleManager;
             string[] roleNames = { "Admin", "Member" };
             IdentityResult roleResult;
-            List<Taxonomy> _taxonomy = new List<Taxonomy>
-            {
-                new Taxonomy()
-                {
-                    Name = "th",
-                    Caption = "ไทย",
-                    Group = "language"
-                },
-                new Taxonomy()
-                {
-                    Name = "en",
-                    Caption = "English",
-                    Group = "language"
+            List<Taxonomy> _taxonomy = new List<Taxonomy>();
+            var languageGroup = new Taxonomy(){
+                Name = "Language",
+                Caption = "Language",
+                Children = new List<Taxonomy> {
+                    new Taxonomy(){
+                        Name = "th",
+                        Caption = "ไทย",
+                        Order = 1
+                    },
+                    new Taxonomy(){
+                        Name = "en",
+                        Caption = "English",
+                        Order = 0
+                    }
                 }
             };
+            _taxonomy.Add(languageGroup);
 
             List<ApplicationUser> _users = new List<ApplicationUser>
             {

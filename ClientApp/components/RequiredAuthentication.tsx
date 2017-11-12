@@ -7,7 +7,7 @@ import { ApplicationState } from '../store';
 import * as AlertState from '../store/Alert';
 import * as SessionState from '../store/Session';
 
-export function requireAuthentication(Component: React.ComponentClass) {
+export function requireAuthentication(Component: React.ComponentType<any>) {
     type SessionProps = SessionState.SessionState
         & {
             sessionActions: typeof SessionState.actionCreators,

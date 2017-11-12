@@ -1,5 +1,7 @@
 import { addTask, fetch } from 'domain-task';
+import { jsonQueryStringifyObjectBare } from 'json-query-string';
 import { Action, ActionCreator, Reducer } from 'redux';
+
 import { AlertType, Bearer, ErrorMessage, Taxonomy } from '../Models';
 import { ApplicationState, AppThunkAction } from './';
 import * as AlertState from './alert';
@@ -37,29 +39,31 @@ interface SubmitTaxonomy {
 
 export type KnownAction = GetTaxonomy | ReceiveTaxonomy | GetTaxonomyItems | ReceiveTaxonomyItems | SubmitTaxonomy;
 export const actionCreators = {
-    createEmptyTaxonomy: (): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    createEmptyTaxonomy: (cb?: () => void): AppThunkAction<KnownAction> => (dispatch, getState) => {
         dispatch({
             activeTaxonomy: {
                 caption: '',
-                group: '',
                 name: '',
             },
             type: 'RECEIVE_TAXONOMY',
         });
+        if (cb) { cb(); }
     },
-    delete: (id: number, cb: () => void): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    delete: (id: number, cb?: () => void): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const token = getState().session.token;
         if (token !== undefined) {
             const fetchTask = fetch(`api/taxonomy/${id}`, {
-                headers: {
+                headers: new Headers({
                     Authorization: `Bearer ${token.access_token}`,
-                },
+                }),
                 method: 'DELETE',
             })
-                .then(() => cb())
-                .catch((err) => {
-                    console.log(err);
-                });
+            .then(() => {
+                if (cb) { cb(); }
+            })
+            .catch((err: any) => {
+                console.log(err);
+            });
             addTask(fetchTask);
             dispatch({ type: 'REQUEST_TAXONOMY', id });
         }
@@ -67,38 +71,40 @@ export const actionCreators = {
     getAllTaxonomy: (filter?: object): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const token = getState().session.token;
         if (token !== undefined) {
-            const fetchTask = fetch(`api/taxonomy`, {
-                headers: {
+            const apipath = `api/taxonomy` + (filter === undefined ? '' : '?' + jsonQueryStringifyObjectBare(filter));
+            const fetchTask = fetch(apipath, {
+                headers: new Headers({
                     Authorization: `Bearer ${token.access_token}`,
-                },
+                }),
             })
-                .then((response) => response.json() as Promise<Taxonomy[]>)
-                .then((data) => {
-                    dispatch({ type: 'RECEIVE_TAXONOMY_ITEMS', items: data });
-                })
-                .catch((err) => {
-                    dispatch({ type: 'RECEIVE_TAXONOMY_ITEMS', items: [] });
-                });
+            .then((response) => response.json() as Promise<Taxonomy[]>)
+            .then((data) => {
+                dispatch({ type: 'RECEIVE_TAXONOMY_ITEMS', items: data });
+            })
+            .catch((err) => {
+                dispatch({ type: 'RECEIVE_TAXONOMY_ITEMS', items: [] });
+            });
             addTask(fetchTask); // Ensure server-side prerendering waits for this to complete
             dispatch({ type: 'REQUEST_TAXONOMY_ITEMS', filter });
         }
     },
 
-    getTaxonomy: (id: number): AppThunkAction<KnownAction> => (dispatch, getState) => {
+    getTaxonomy: (id: number, cb?: () => void): AppThunkAction<KnownAction> => (dispatch, getState) => {
         const token = getState().session.token;
         if (token !== undefined) {
             const fetchTask = fetch(`api/taxonomy/${id}`, {
-                headers: {
+                headers: new Headers({
                     Authorization: `Bearer ${token.access_token}`,
-                },
+                }),
             })
-                .then((response) => response.json() as Promise<Taxonomy>)
-                .then((data) => {
-                    dispatch({ type: 'RECEIVE_TAXONOMY', activeTaxonomy: data });
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            .then((response) => response.json() as Promise<Taxonomy>)
+            .then((data) => {
+                dispatch({ type: 'RECEIVE_TAXONOMY', activeTaxonomy: data });
+            })
+            .then(() => { if (cb) {cb(); }})
+            .catch((err) => {
+                console.log(err);
+            });
             addTask(fetchTask);
             dispatch({ type: 'REQUEST_TAXONOMY', id });
         }
@@ -111,27 +117,27 @@ export const actionCreators = {
             if (value.id === undefined) {
                 fetchTask = fetch(`api/taxonomy`, {
                     body: JSON.stringify(value),
-                    headers: {
+                    headers: new Headers({
                         'Authorization': `Bearer ${token.access_token}`,
                         'Content-type': 'application/json',
-                    },
+                    }),
                     method: 'POST',
                 })
-                    .then((response) => response.json() as Promise<Taxonomy>)
-                    .then((data) => {
-                        dispatch({ type: 'RECEIVE_TAXONOMY', activeTaxonomy: data });
-                        cb();
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                .then((response) => response.json() as Promise<Taxonomy>)
+                .then((data) => {
+                    dispatch({ type: 'RECEIVE_TAXONOMY', activeTaxonomy: data });
+                    cb();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
             } else {
                 fetchTask = fetch(`api/taxonomy/${value.id}`, {
                     body: JSON.stringify(value),
-                    headers: {
+                    headers: new Headers({
                         'Authorization': `Bearer ${token.access_token}`,
                         'Content-type': 'application/json',
-                    },
+                    }),
                     method: 'PUT',
                 })
                     .then(() => {

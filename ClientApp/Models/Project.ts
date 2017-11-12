@@ -2,5 +2,7 @@ export interface Taxonomy {
     id?: number;
     name: string;
     caption: string;
-    group: string;
+    parent?: Taxonomy;
+    children?: Taxonomy[];
+    order?: number;
 }

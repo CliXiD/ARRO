@@ -25,7 +25,7 @@ namespace ARRO.Contexts
             //Map to table name
             modelBuilder.Entity<Taxonomy>().ToTable("Taxonomy");
             //Define defualt value and behavior for change after save
-            modelBuilder.Entity<Taxonomy>().Property(f => f.ID)
+            modelBuilder.Entity<Taxonomy>().Property(f => f.Id)
                 .ValueGeneratedOnAdd();
             modelBuilder.Entity<Taxonomy>().Property(p => p.CreatedDate)
                 .HasDefaultValueSql("getutcdate()")
@@ -34,7 +34,6 @@ namespace ARRO.Contexts
                 .HasDefaultValueSql("getutcdate()")
                 .ValueGeneratedOnAddOrUpdate()
                 .Metadata.AfterSaveBehavior = PropertySaveBehavior.Save;
-
             //Define private property for filtering for soft delete
             modelBuilder.Entity<Taxonomy>().Property<bool>(_isDeleted);
             modelBuilder.Entity<Taxonomy>().HasQueryFilter(i => !EF.Property<bool>(i, _isDeleted));

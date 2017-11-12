@@ -16,7 +16,7 @@ using AspNet.Security.OAuth.Validation;
 
 namespace ARRO.Controllers
 {
-    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     abstract public class GenericController<T, KeyType> : Controller where T : class
     {
