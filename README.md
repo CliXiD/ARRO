@@ -1,4 +1,4 @@
-# ARRO
+# ARRO [Code is broken, so sorry I have no time to fix it]
 
 ASP NET Core with React, Redux and OpenIdDict project template
 Inspiration from <https://github.com/aspnet/templating>
